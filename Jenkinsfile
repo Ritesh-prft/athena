@@ -1,12 +1,16 @@
 pipeline {
-    agent any
-
+    agent none 
     stages {
-        stage('Python Script') {
+        stage('Build') { 
+            agent {
+                docker {
+                    image 'python:2-alpine' 
+                }
+            }
             steps {
-                sh '/usr/bin/python3 athena.py'
+                sh 'python -m athena.py' 
+                stash(name: 'compiled-results', includes: 'sources/*.py*') 
             }
         }
-        
     }
 }
